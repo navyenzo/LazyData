@@ -161,6 +161,8 @@ private:
     // the "In-Focus Node's Contents"
     LazyApp::AnimatedDrawer expanded_node_drawer_;
 
+    // The file browser used to let users open/save files
+    LazyApp::FileBrowserManager file_browser_;
 
     sf::Vector2f main_menu_bar_size_ = sf::Vector2f(0,0);
 
@@ -244,6 +246,9 @@ inline void LazyDataEditor::loop_function(const sf::Time& delta_time)
 
     // Draw the studies
     draw_studies();
+
+    // Display the file browser is it needs to be displayed
+    LazyApp::FileBrowserManager::display();
 
     // Clear the current window with the background color
     this->window_->clear(this->app_properties_.background_color);

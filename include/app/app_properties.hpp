@@ -30,8 +30,8 @@
 // imgui plotting library implot
 #include <implot.h>
 
-// Native File Dialog library
-#include <utils/native_file_dialog.hpp>
+// File browser
+#include <utils/file_browser.hpp>
 
 // Unique id generator
 #include <utils/unique_id.hpp>

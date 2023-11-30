@@ -151,47 +151,18 @@ FetchContent_MakeAvailable(implot)
 
 
 ###############################################################
-# native file dialog library
-# - This is used to create open and save file dialogs
+# imgui-filebrowser library
+# - This is used to open/save files within the application
 ###############################################################
-
-# Declare NFD dependency
+# Declare imgui_filebrowser dependency with a specific commit hash
 FetchContent_Declare(
-    nfd
-    GIT_REPOSITORY https://github.com/mlabbe/nativefiledialog.git
+    imgui_filebrowser
+    GIT_REPOSITORY https://github.com/AirGuanZ/imgui-filebrowser.git
     GIT_TAG master
 )
 
-# Fetch the content (download if necessary)
-FetchContent_GetProperties(nfd)
-if(NOT nfd_POPULATED)
-    FetchContent_Populate(nfd)
-
-    # Include directories for NFD
-    set(NFD_INCLUDE_DIRS 
-        "${nfd_SOURCE_DIR}/src/include" 
-        "${nfd_SOURCE_DIR}/src"
-    )
-
-    # Add NFD directly to the build. This creates a target named 'nfd'.
-    add_library(nfd STATIC 
-        ${nfd_SOURCE_DIR}/src/nfd_common.c
-        ${nfd_SOURCE_DIR}/src/nfd_gtk.c  # Replace with appropriate platform-specific file
-    )
-
-    # Set the include directories for nfd
-    target_include_directories(nfd PRIVATE ${NFD_INCLUDE_DIRS})
-endif()
-
-# Conditionally find and link GTK+ if on Linux
-if(UNIX AND NOT APPLE)
-    find_package(PkgConfig REQUIRED)
-    pkg_check_modules(GTK3 REQUIRED gtk+-3.0)
-
-    target_include_directories(nfd PUBLIC ${GTK3_INCLUDE_DIRS})
-    target_link_libraries(nfd PUBLIC ${GTK3_LIBRARIES})
-    target_compile_options(nfd PUBLIC ${GTK3_CFLAGS_OTHER})
-endif()
+# Make ImGui-SFML content available for use
+FetchContent_MakeAvailable(imgui_filebrowser)
 ###############################################################
 
 
@@ -304,6 +275,7 @@ set(DEPENDENCIES_INCLUDE_PATHS
     "${CMAKE_BINARY_DIR}/_deps/imgui_node_editor-src"
     "${CMAKE_BINARY_DIR}/_deps/imnodes-src"
     "${CMAKE_BINARY_DIR}/_deps/implot-src"
+    "${CMAKE_BINARY_DIR}/_deps/imgui_filebrowser-src"
     "${CMAKE_BINARY_DIR}/_deps/nfd-src/src/include"
     "${CMAKE_BINARY_DIR}/_deps/nfd-src/src"
     "${CMAKE_BINARY_DIR}/_deps/lazymatrix-src/include"
@@ -324,7 +296,6 @@ set(DEPENDENCY_LIBS_TO_LINK_TO
     ${SFML_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
     imnodes
-    nfd
     LazyMatrix
     # Add Boost libraries (if any specific Boost libraries are used in the project)
     PARENT_SCOPE

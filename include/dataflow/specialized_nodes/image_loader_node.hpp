@@ -4,11 +4,13 @@
 
 
 //-------------------------------------------------------------------
-#include <utils/native_file_dialog.hpp>
+#include <imfilebrowser.h>
 
 #include "../node_styling.hpp"
 #include "../node.hpp"
 #include "../matrix_table_ui.hpp"
+
+#include <utils/file_browser.hpp>
 //-------------------------------------------------------------------
 
 
@@ -94,37 +96,34 @@ public:
     {
         if(ImGui::Button("Load Image"))
         {
+            LazyApp::FileBrowserManager::open_file_browser(this->get_id(),
+            { ".png", ".jpg", ".jpeg", ".bmp", ".tiff", ".tif", ".gif", ".svg" });
+        }
+        
+        std::string selected_filename = LazyApp::FileBrowserManager::has_selected(this->get_id());
 
-            std::cout << "\nfuck\n\n\n" << std::endl;
+        if(!selected_filename.empty())
+        {
+            LazyMatrix::ImageMatrix<dlib::rgb_pixel> loaded_image(selected_filename);
 
+            matrix_data_.resize(loaded_image.rows(), loaded_image.columns() * 3);    
 
-            std::string image_filename = LazyApp::FileDialog::open_dialog_image();
-
-            std::cout << "\nshit\n\n\n" << std::endl;
-
-            if(!image_filename.empty())
+            for(int i = 0; i < loaded_image.rows(); ++i)
             {
-                LazyMatrix::ImageMatrix<dlib::rgb_pixel> loaded_image(image_filename.c_str());
-
-                matrix_data_.resize(loaded_image.rows(), loaded_image.columns() * 3);
-
-                for(int i = 0; i < loaded_image.rows(); ++i)
+                for(int j = 0, k = 0; j < loaded_image.columns(); ++j, k+=3)
                 {
-                    for(int j = 0, k = 0; j < loaded_image.columns(); ++j, k+=3)
-                    {
-                        matrix_data_(i,k) = loaded_image(i,j).red;
-                        matrix_data_(i,k+1) = loaded_image(i,j).green;
-                        matrix_data_(i,k+2) = loaded_image(i,j).blue;
-                    }
+                    matrix_data_(i,k) = loaded_image(i,j).red;
+                    matrix_data_(i,k+1) = loaded_image(i,j).green;
+                    matrix_data_(i,k+2) = loaded_image(i,j).blue;
                 }
             }
-            
+
             output_pin_.update_data(&matrix_data_);
         }
 
         ImGui::Dummy(ImVec2(0,30));
 
-        draw_matrix_table(matrix_data_, page_index_, ImVec2(-1,-1), /*ImVec2(this->node_styling_.get_node_maximum_width(), -1),*/ are_entries_editable_);
+        draw_matrix_table(matrix_data_, page_index_, ImVec2(this->get_node_width(), -1), are_entries_editable_);
     }
 
 
