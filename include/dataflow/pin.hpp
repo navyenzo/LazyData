@@ -42,6 +42,7 @@ public:
      */
     Pin()
     {
+        this->initialize_toggle_button();
         output_links_.reserve(10);
     }
 
@@ -168,7 +169,7 @@ public:
                 pin_data_size += ")";
             }
 
-            this->get_toggle_button()->draw(&should_linked_pins_be_updated_if_data_changes_, pin_data_size);
+            toggle_button_->draw(&should_linked_pins_be_updated_if_data_changes_, pin_data_size);
 
             ImNodes::EndOutputAttribute();
         }
@@ -180,26 +181,19 @@ public:
 
 private:
 
-    // Function used to create/get the toggle button used to
-    // indicate whether linked pins will be notified when
-    // the internal data of this pin is updated.
-    std::shared_ptr<LazyApp::ToggleButton> get_toggle_button()
+    // Function used to initialize the toggle button
+    // used to pause/resume output pins notifying that
+    // their underlying data has changed
+    void initialize_toggle_button()
     {
-        static std::shared_ptr<LazyApp::ToggleButton> toggle_button;
+        // First get the path to the executable's resources sub-folder
+        auto executable_parent_path = LazyMatrix::get_absolute_path_of_executable_parent_directory();
+        std::string resources_path = executable_parent_path.string() + "/resources/images/";
 
-        if(!toggle_button)
-        {
-            // First get the path to the executable's resources sub-folder
-            auto executable_parent_path = LazyMatrix::get_absolute_path_of_executable_parent_directory();
-            std::string resources_path = executable_parent_path.string() + "/resources/images/";
-
-            // We then create the toggle button
-            toggle_button = std::make_shared<LazyApp::ToggleButton>(resources_path + std::string("on_toggle.png"),
-                                                                    resources_path + std::string("off_toggle.png"),
-                                                                    ImVec2(200,200));
-        }
-        
-        return toggle_button;
+        // We then create the toggle button
+        toggle_button_ = std::make_shared<LazyApp::ToggleButton>(resources_path + std::string("on_toggle.png"),
+                                                                 resources_path + std::string("off_toggle.png"),
+                                                                 ImVec2(30,30));
     }
 
 
@@ -217,6 +211,8 @@ private:
 
     Link<DataType>* input_link_ = nullptr;
     std::vector<Link<DataType>*> output_links_;
+
+    std::shared_ptr<LazyApp::ToggleButton> toggle_button_;
 };
 //-------------------------------------------------------------------
 

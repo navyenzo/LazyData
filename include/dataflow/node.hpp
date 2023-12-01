@@ -7,6 +7,7 @@
 #include <nlohmann/json.hpp>
 #include "pin.hpp"
 #include "node_styling.hpp"
+#include <app/imgui_helpers.hpp>
 //-------------------------------------------------------------------
 
 
@@ -154,6 +155,9 @@ public:
         ImNodes::BeginNode(id_);
 
             this->draw_title_bar();
+
+            ImVec2 first_separator_pos;
+            ImVec2 second_separator_pos;
 
             // Spacing between title bar and node content
             ImGui::Dummy(ImVec2(0,20));
