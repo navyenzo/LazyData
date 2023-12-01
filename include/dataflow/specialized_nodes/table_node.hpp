@@ -114,7 +114,7 @@ public:
         if(input_pin_.get_data())
         {
 
-            if(draw_matrix_table(*input_pin_.get_data(), page_index_, ImVec2(1.5*this->get_node_width(),this->get_node_width()), are_entries_editable_))
+            if(draw_matrix_table(*input_pin_.get_data(), page_index_, ImVec2(this->get_node_width(),this->get_node_width()), are_entries_editable_))
             {
                 // This means the user updated the data manually by changinge it
                 // directly in the table

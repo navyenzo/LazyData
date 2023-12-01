@@ -158,29 +158,23 @@ public:
             // Spacing between title bar and node content
             ImGui::Dummy(ImVec2(0,20));
 
-            // Collapsable section holding the node's content
-            if(show_node_contents_)
-            {
-                ImGui::BeginGroup();
-                    underlying().draw_node_content();
-                ImGui::EndGroup();
-                
-                // Spacing between node content and intput/output pins
-                ImGui::Dummy(ImVec2(0,20));
-            }
-
             // Draw the input pins
             ImGui::BeginGroup();
                 this->draw_input_pins();
             ImGui::EndGroup();
 
-            // Spacing necessary to draw input pins
-            // on the left and output pins on the right
-            ImGui::SameLine();
-            ImGui::Dummy(ImVec2(this->get_node_width(),0));
-            ImGui::SameLine();
+            // Collapsable section holding the node's content
+            if(show_node_contents_)
+            {
+                ImGui::SameLine();
+
+                ImGui::BeginGroup();
+                    underlying().draw_node_content();
+                ImGui::EndGroup();
+            }
 
             // Draw the output pins
+            ImGui::SameLine();
             ImGui::BeginGroup();
                 this->draw_output_pins();
             ImGui::EndGroup();

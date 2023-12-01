@@ -161,7 +161,7 @@ public:
 
         ImGui::Dummy(ImVec2(0,30));
 
-        draw_matrix_table(matrix_data_, page_index_, ImVec2(1.5*this->get_node_width(),this->get_node_width()), are_entries_editable_);
+        draw_matrix_table(matrix_data_, page_index_, ImVec2(this->get_node_width(),this->get_node_width()), are_entries_editable_);
     }
 
 
