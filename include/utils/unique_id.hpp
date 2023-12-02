@@ -52,7 +52,7 @@ public:
      * 
      * @return uintptr_t A hash value corresponding to the UUID.
      */
-    static int generate_uuid_hash()
+    static uintptr_t generate_uuid_hash()
     {
         std::string uuid_string = generate_uuid_string();
         return std::hash<std::string>{}(uuid_string);

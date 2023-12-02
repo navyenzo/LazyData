@@ -62,22 +62,22 @@ public:
 
 
 
-    const std::unordered_map<std::string, int>& get_selected_rows()const
+    const std::unordered_map<std::string, int64_t>& get_selected_rows()const
     {
         return selected_rows_;
     }
 
-    const std::unordered_map<std::string, int>& get_selected_columns()const
+    const std::unordered_map<std::string, int64_t>& get_selected_columns()const
     {
         return selected_columns_;
     }
 
-    const std::vector<int>& get_selected_rows_vector()const
+    const std::vector<int64_t>& get_selected_rows_vector()const
     {
         return selected_rows_vector_;
     }
 
-    const std::vector<int>& get_selected_columns_vector()const
+    const std::vector<int64_t>& get_selected_columns_vector()const
     {
         return selected_columns_vector_;
     }
@@ -325,14 +325,14 @@ private: // Private functions
 
 private: // Private variables
 
-    std::unordered_map<std::string, int> selected_rows_;
-    std::unordered_map<std::string, int> selected_columns_;
+    std::unordered_map<std::string, int64_t> selected_rows_;
+    std::unordered_map<std::string, int64_t> selected_columns_;
 
     bool are_all_rows_selected_ = false;
     bool are_all_columns_selected_ = false;
 
-    std::vector<int> selected_rows_vector_;
-    std::vector<int> selected_columns_vector_;
+    std::vector<int64_t> selected_rows_vector_;
+    std::vector<int64_t> selected_columns_vector_;
 
     int previous_number_of_rows_ = 0;
     int previous_number_of_columns_ = 0;

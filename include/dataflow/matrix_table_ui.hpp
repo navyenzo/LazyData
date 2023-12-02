@@ -50,7 +50,7 @@ inline bool draw_matrix_table(MatrixType& matrix_data, int& page_index, const Im
     {
         ImGui::BeginGroup();
 
-        int number_of_visible_columns = std::min(matrix_data.columns(), IMGUI_TABLE_MAX_COLUMNS - 3) + 1;
+        int number_of_visible_columns = std::min(matrix_data.columns(), uintptr_t(IMGUI_TABLE_MAX_COLUMNS - 3)) + 1;
 
         // We use the idea of pages in order to show large tables
         // that have more than IMGUI_TABLE_MAX_COLUMNS columns

@@ -4,7 +4,24 @@
 
 
 //-------------------------------------------------------------------
+#include <string>
+#include <stdexcept>
 #include <memory>
+
+#include <utils/unique_id.hpp>
+//-------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------
+/** 
+ * @file data.hpp
+ * @brief Defines Data, Data3D, SpecializedData, and SpecializedData3D classes for handling matrix-like data.
+ * @namespace DataFlow
+ *
+ * This file includes templated classes for handling generic data types in 2D and 3D matrix-like structures.
+ * These classes are designed to be used in computational node graphs, allowing for flexible data management.
+ */
 //-------------------------------------------------------------------
 
 
@@ -17,112 +34,133 @@ namespace DataFlow
 
 
 //-------------------------------------------------------------------
-/**
- * @brief Abstract base class for data types.
+/** 
+ * @class Data
+ * @brief Base template class for handling 2D matrix-like data.
  *
- * The Data class serves as a base for all data types, providing
- * a common interface for accessing elements and size information.
+ * This class provides an interface for 2D matrix-like data, 
+ * supporting various data types. It includes a unique identifier 
+ * and virtual functions for common matrix operations.
  */
 //-------------------------------------------------------------------
-template<typename ReturnType>
+template <typename T>
 class Data
 {
 public:
 
+    Data() : id_(UniqueID::generate_uuid_string()) {}
+
     virtual ~Data() = default;
 
-    /**
-     * @brief Get the element at the specified row and column.
-     * 
-     * @param row The row index.
-     * @param column The column index.
-     * @return The value at the specified location.
-     */
-    virtual ReturnType at(int row, int column) const = 0;
+    std::string getId() const { return id_; }
 
-    /**
-     * @brief Get the element at the specified row and column.
-     * 
-     * @param row The row index.
-     * @param column The column index.
-     * @return The value at the specified location.
-     */
-    ReturnType operator()(int row, int column)
-    {
-        return this->at(row, column);
-    }
-
-    /**
-     * @brief Get the number of rows.
-     * 
-     * @return Number of rows.
-     */
-    virtual int rows() const = 0;
-
-    /**
-     * @brief Get the number of columns.
-     * 
-     * @return Number of columns.
-     */
-    virtual int columns() const = 0;
+    virtual size_t rows() const = 0;
+    virtual size_t columns() const = 0;
+    virtual T at(size_t i, size_t j) const = 0;
+    virtual T& operator()(size_t i, size_t j) = 0;
 
 
-
-    /**
-     * @brief Get the size of the matrix as if it were a 1d array
-     * 
-     * @return size of the matrix as a 1d array
-     */
-    int side() const { return this->rows() * this->columns(); }
-};
-//-------------------------------------------------------------------
-
-
-
-//-------------------------------------------------------------------
-/**
- * @brief Concrete data class for matrix data.
- *
- * MatrixData encapsulates matrix data and provides access
- * to elements, rows, and columns.
- *
- * @tparam MatrixType Type of the underlying matrix.
- * @tparam ReturnType The return type of the at function.
- */
-//-------------------------------------------------------------------
-template <typename MatrixType, typename ReturnType>
-class MatrixData : public Data<ReturnType>
-{
-public:
-
-    /**
-     * @brief Construct a new MatrixData object.
-     * 
-     * @param matrix The matrix to encapsulate.
-     */
-    explicit MatrixData(const MatrixType& matrix) 
-        : matrix_(std::make_shared<MatrixType>(matrix)) 
-    { 
-    }
-
-    virtual ReturnType at(int row, int column) const override
-    {
-        return static_cast<ReturnType>((*matrix_)(row, column));
-    }
-
-    virtual int rows() const override
-    {
-        return matrix_->rows();
-    }
-
-    virtual int columns() const override
-    {
-        return matrix_->columns();
-    }
 
 private:
 
-    std::shared_ptr<MatrixType> matrix_;
+    std::string id_;
+};
+//-------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------
+/** 
+ * @class Data3D
+ * @brief Base template class for handling 3D matrix-like data.
+ *
+ * This class extends Data to provide an interface for 3D matrix-like data.
+ * It includes additional functionality to handle the extra dimension in 3D data.
+ */
+//-------------------------------------------------------------------
+template <typename T>
+class Data3D
+{
+public:
+
+    Data3D() : id_(UniqueID::generate_uuid_string()) {}
+
+    virtual ~Data3D() = default;
+
+    virtual size_t pages() const = 0;
+    virtual size_t rows() const = 0;
+    virtual size_t columns() const = 0;
+    virtual T at(size_t i, size_t j, size_t k) const = 0;
+    virtual T& operator()(size_t i, size_t j, size_t k) = 0;
+
+
+
+private:
+
+    std::string id_;
+};
+//-------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------
+/** 
+ * @class SpecializedData
+ * @brief Template class for specialized 2D matrix-like data handling.
+ *
+ * This class extends the Data class to handle specific types of 
+ * 2D matrix-like data structures. It provides implementations for 
+ * the virtual functions defined in Data.
+ */
+//-------------------------------------------------------------------
+template <typename MatrixType, typename T>
+class SpecializedData : public Data<T>
+{
+public:
+
+    SpecializedData(const MatrixType& matrix) : matrix_(matrix) {}
+
+    size_t rows() const override { return matrix_.rows(); }
+    size_t columns() const override { return matrix_.columns(); }
+    T at(size_t i, size_t j) const override { return matrix_.at(i, j); }
+    T& operator()(size_t i, size_t j) override { return matrix_(i, j); }
+
+
+
+private:
+
+    MatrixType matrix_;
+};
+//-------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------
+/** 
+ * @class SpecializedData3D
+ * @brief Template class for specialized 3D matrix-like data handling.
+ *
+ * This class extends the Data3D class to handle specific types of 
+ * 3D matrix-like data structures. It provides implementations for 
+ * the virtual functions defined in Data3D.
+ */
+//-------------------------------------------------------------------
+template <typename MatrixType, typename T>
+class SpecializedData3D : public Data3D<T>
+{
+public:
+
+    SpecializedData3D(const MatrixType& matrix) : matrix_(matrix) {}
+
+    size_t pages() const override { return matrix_.pages(); }
+    size_t rows() const override { return matrix_.rows(); }
+    size_t columns() const override { return matrix_.columns(); }
+    T at(size_t i, size_t j, size_t k) const override { return matrix_.at(i, j, k); }
+    T& operator()(size_t i, size_t j, size_t k) override { return matrix_(i, j, k); }
+
+private:
+
+    MatrixType matrix_;
 };
 //-------------------------------------------------------------------
 
@@ -130,19 +168,37 @@ private:
 
 //-------------------------------------------------------------------
 /**
- * @brief Factory function to create a MatrixData object with automatic return type deduction.
+ * @brief Factory function to create a SpecializedData object.
  * 
- * @tparam MatrixType Type of the matrix.
- * @param matrix The matrix to encapsulate.
- * @return std::shared_ptr<Data<ReturnType>> Shared pointer to the created MatrixData object.
+ * @tparam MatrixType Type of the 2D matrix.
+ * @param matrix The 2D matrix to encapsulate.
+ * @return std::shared_ptr<SpecializedData<MatrixType, T>> Shared pointer to the created object.
  */
 //-------------------------------------------------------------------
 template <typename MatrixType>
-
 auto create_data(const MatrixType& matrix)
 {
-    using ReturnType = decltype(matrix.at(0, 0));
-    return std::make_shared<MatrixData<MatrixType, ReturnType>>(matrix);
+    using DataType = decltype(matrix.at(0, 0));
+    return std::make_shared<SpecializedData<MatrixType, DataType>>(matrix);
+}
+//-------------------------------------------------------------------
+
+
+
+//-------------------------------------------------------------------
+/**
+ * @brief Factory function to create a SpecializedData3D object.
+ * 
+ * @tparam MatrixType Type of the 3D matrix.
+ * @param matrix The 3D matrix to encapsulate.
+ * @return std::shared_ptr<SpecializedData3D<MatrixType, T>> Shared pointer to the created object.
+ */
+//-------------------------------------------------------------------
+template <typename MatrixType>
+auto create_data3d(const MatrixType& matrix)
+{
+    using DataType = decltype(matrix.at(0, 0, 0));
+    return std::make_shared<SpecializedData3D<MatrixType, DataType>>(matrix);
 }
 //-------------------------------------------------------------------
 
