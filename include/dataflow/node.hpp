@@ -128,7 +128,7 @@ public:
     float get_node_width()const
     {
         if(show_node_contents_)
-            return node_styling_.get_node_expanded_width();
+            return node_styling_.get_node_width();
         else
             return node_styling_.get_node_collapsed_width();
     }
@@ -156,32 +156,31 @@ public:
 
             this->draw_title_bar();
 
-            ImVec2 first_separator_pos;
-            ImVec2 second_separator_pos;
-
             // Spacing between title bar and node content
             ImGui::Dummy(ImVec2(0,20));
+
+            // Collapsable section holding the node's content
+            if(show_node_contents_)
+            {
+                ImGui::BeginGroup();
+                    underlying().draw_node_content();
+                ImGui::EndGroup();
+            }
 
             // Draw the input pins
             ImGui::BeginGroup();
                 this->draw_input_pins();
             ImGui::EndGroup();
 
-            // Collapsable section holding the node's content
-            if(show_node_contents_)
-            {
-                ImGui::SameLine();
-
-                ImGui::BeginGroup();
-                    underlying().draw_node_content();
-                ImGui::EndGroup();
-            }
-
             // Draw the output pins
-            ImGui::SameLine();
+            ImGui::SameLine(this->get_node_width());
             ImGui::BeginGroup();
                 this->draw_output_pins();
             ImGui::EndGroup();
+
+            // Handle node resizing
+            if(show_node_contents_)
+                handle_node_resizing();
 
         // End drawing the node
         ImNodes::EndNode();
@@ -211,6 +210,68 @@ public:
             show_node_contents_ = !show_node_contents_;
         }
     }
+
+
+
+    /**
+     * @brief Handles resizing of the node.
+     */
+    void handle_node_resizing()
+    {
+        // Get the top-left position of the node in screen space
+        ImVec2 node_pos = ImNodes::GetNodeScreenSpacePos(id_);
+
+        // Get the dimensions of the node
+        ImVec2 node_dimensions = ImNodes::GetNodeDimensions(id_);
+
+        // Calculate the position for the resizing handle at the bottom-right corner of the node
+        ImVec2 resize_area_center = ImVec2(node_pos.x + node_dimensions.x, node_pos.y + node_dimensions.y);
+        float handle_radius = 5.0f; // Adjust as needed
+        ImVec2 resize_area_start = ImVec2(resize_area_center.x - handle_radius, resize_area_center.y - handle_radius);
+        ImVec2 resize_area_end = ImVec2(resize_area_center.x + handle_radius, resize_area_center.y + handle_radius);
+
+        // Check if mouse is hovering over the resizing handle
+        bool is_hovering = ImGui::IsMouseHoveringRect(resize_area_start, resize_area_end);
+
+        // Draw the resizing handle
+        ImU32 handle_color = is_hovering ? IM_COL32(0, 255, 0, 255) : IM_COL32(255, 255, 255, 255);
+        ImGui::GetWindowDrawList()->AddCircleFilled(resize_area_center, handle_radius, handle_color);
+
+        // Show tooltip and change cursor when hovering or resizing
+        if (is_hovering || is_resizing_)
+        {
+            ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+            ImGui::BeginTooltip();
+            ImGui::Text("Drag to resize");
+            ImGui::EndTooltip();
+        }
+
+        // Check for mouse interaction
+        ImGuiIO& io = ImGui::GetIO();
+        if (io.MouseClicked[0] && is_hovering)
+        {
+            is_resizing_ = true;
+            initial_mouse_x_ = io.MousePos.x; // Store the initial mouse x position
+        }
+        else if (io.MouseReleased[0])
+        {
+            is_resizing_ = false;
+        }
+
+        if (is_resizing_)
+        {
+            // Calculate the amount of width change based on the mouse movement
+            float width_change = io.MousePos.x - initial_mouse_x_;
+
+            // Update the node width by the calculated amount
+            node_styling_.change_node_width_by_amount(width_change);
+
+            // Update initial mouse x position for the next frame
+            initial_mouse_x_ = io.MousePos.x;
+        }
+    }
+
+
 
     /**
      * @brief Saves the current state of the Node as a JSON object.
@@ -281,6 +342,13 @@ private:
 
         ImGui::PopItemWidth();
     }
+
+
+
+    // New member variable for tracking resizing state
+    bool is_resizing_ = false;
+
+    float initial_mouse_x_ = 0;
     
 
 

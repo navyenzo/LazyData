@@ -56,6 +56,7 @@ public:
           title_bar_selected_color_(title_bar_selected_color),
           node_outline_color_(node_outline_color),
           node_expanded_width_(node_expanded_width),
+          node_width_(node_expanded_width),
           node_collapsed_width_(node_collapsed_width),
           node_background_color_(node_background_color),
           node_background_hovered_color_(node_background_hovered_color),
@@ -111,6 +112,10 @@ public:
     const ImVec4& get_node_outline_color() const { return node_outline_color_; }
     void set_node_outline_color(const ImVec4& color) { node_outline_color_ = color; }
 
+    float get_node_width() const { return node_width_; }
+    void set_node_width(float node_width) { node_width_ = std::max(node_expanded_width_, node_width); }
+    void change_node_width_by_amount(float amount) { float node_width = node_width_ + amount; this->set_node_width(node_width); }
+
     float get_node_expanded_width() const { return node_expanded_width_; }
     void set_node_expanded_width(float node_expanded_width) { node_expanded_width_ = node_expanded_width; }
 
@@ -138,6 +143,7 @@ protected:
 
     float node_expanded_width_;
     float node_collapsed_width_;
+    float node_width_;
     
     ImVec4 node_background_color_;
     ImVec4 node_background_hovered_color_;
