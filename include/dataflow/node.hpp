@@ -242,7 +242,7 @@ public:
         {
             ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
             ImGui::BeginTooltip();
-            ImGui::Text("Drag to resize");
+            ImGui::Text("  <---|--->  Drag to resize");
             ImGui::EndTooltip();
         }
 
