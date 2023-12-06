@@ -3,13 +3,84 @@
 # FetchContent is used to download external dependencies
 include(FetchContent)
 
+# External Project for downloading/compiling libjpeg when
+# cross-compiling with mingw64 on linux for windows
+include(ExternalProject)
+
+
+
+###############################################################
+# Exceptions for when cross-compiling for windows in linux
+###############################################################
+
+# Default configuration for SFML
+set(SFML_BUILD_AUDIO ON)
+
+# Check if compiling with MinGW-w64 on Linux for Windows (Cross-compiling)
+if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_COMPILER_IS_GNUCXX)
+
+    set(SFML_USE_X11 OFF CACHE BOOL "Don't use X11 for SFML on Windows")
+    
+    # Fetch and compile OpenAL
+    FetchContent_Declare(
+        openal
+        GIT_REPOSITORY https://github.com/kcat/openal-soft.git
+        GIT_TAG master # Specify a particular tag or commit if needed
+    )
+    FetchContent_MakeAvailable(openal)
+
+    set(SFML_BUILD_AUDIO OFF)
+
+    # Use system dependencies for SFML
+    set(SFML_USE_SYSTEM_DEPS TRUE)
+
+    # Fetch and build ZLIB
+    FetchContent_Declare(
+        zlib
+        GIT_REPOSITORY https://github.com/madler/zlib.git
+        GIT_TAG develop
+    )
+    FetchContent_MakeAvailable(zlib)
+
+    # Set ZLIB include directories and library
+    set(ZLIB_INCLUDE_DIR "${zlib_SOURCE_DIR}" "${zlib_BINARY_DIR}")
+    set(ZLIB_LIBRARY zlib)
+    
+    # Fetch and build libpng (which depends on ZLIB)
+    FetchContent_Declare(
+        libpng
+        GIT_REPOSITORY https://github.com/glennrp/libpng.git
+        GIT_TAG libpng16
+    )
+    set(PNG_BUILD_ZLIB ON CACHE BOOL "Custom build zlib for libpng")
+    FetchContent_MakeAvailable(libpng)
+
+    # Set PNG include directories and library
+    set(PNG_INCLUDE_DIR "${libpng_SOURCE_DIR}" "${libpng_BINARY_DIR}")
+    set(PNG_LIBRARY png)
+
+    # Jpeg related settings
+    # Specify where to install the built library
+    ExternalProject_Add(libjpeg-turbo
+        GIT_REPOSITORY https://github.com/libjpeg-turbo/libjpeg-turbo.git
+        GIT_TAG master  # You can specify a particular tag or commit if needed
+        CMAKE_ARGS -DCMAKE_INSTALL_PREFIX=${CMAKE_BINARY_DIR}/libjpeg-turbo
+    )
+
+    # Specify where to find the built library and include files
+    set(JPEG_INCLUDE_DIR ${CMAKE_BINARY_DIR}/libjpeg-turbo/include)
+    set(JPEG_LIBRARY ${CMAKE_BINARY_DIR}/libjpeg-turbo/lib/libjpeg.a)
+
+endif()
+
+###############################################################
+
 
 
 ###############################################################
 # SFML library
 ###############################################################
-
-# Declare SFML dependency with a specific Git commit hash
+# Declare SFML dependency
 FetchContent_Declare(
     sfml
     GIT_REPOSITORY "https://github.com/SFML/SFML"
