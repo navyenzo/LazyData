@@ -223,21 +223,6 @@ FetchContent_MakeAvailable(boost)
 # Include the top-level Boost directory
 set(BOOST_INCLUDE_DIR "${boost_SOURCE_DIR}/boost")
 message(STATUS "Including Boost directory: ${BOOST_INCLUDE_DIR}")
-
-# # Get a list of all subdirectories in the libs directory
-# file(GLOB BOOST_LIB_SUBDIRS LIST_DIRECTORIES true "${CMAKE_BINARY_DIR}/_deps/boost-src/libs/*")
-
-# # Accumulate Boost include directories
-# set(BOOST_INCLUDE_DIRS "")
-# foreach(SUBDIR ${BOOST_LIB_SUBDIRS})
-#     if(IS_DIRECTORY "${SUBDIR}" AND EXISTS "${SUBDIR}/include")
-#         # Append to the list
-#         set(BOOST_INCLUDE_DIRS "${BOOST_INCLUDE_DIRS} ${SUBDIR}/include")
-#     endif()
-# endforeach()
-
-# Boost may have some compiled libraries that your project uses.
-# CMake will handle this automatically based on the actual usage in your project.
 ###############################################################
 
 
