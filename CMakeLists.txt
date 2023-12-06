@@ -3,11 +3,13 @@ project(LazyData)
 
 
 
+###############################################################
 # Include the FetchContent module to handle external dependencies
 include(FetchContent)
 
 # Include the dependencies from the dependencies folder
 add_subdirectory(dependencies)
+###############################################################
 
 
 
