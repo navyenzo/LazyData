@@ -79,9 +79,11 @@ public:
     {
         this->underlying().kill();
         
-        if (this->window_)
+        if(this->window_)
         {
-            this->window_->close();
+            if(this->window_->isOpen())
+                this->window_->close();
+            
             ImGui::SFML::Shutdown(*this->window_);
         }
     }

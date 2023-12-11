@@ -157,6 +157,9 @@ public:
 
         if(window_)
         {
+            if(window_->isOpen())
+                window_->close();
+                
             delete window_;
             window_ = nullptr;
         }
