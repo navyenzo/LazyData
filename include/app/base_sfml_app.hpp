@@ -185,7 +185,6 @@ public:
             this->loop_function(delta_clock_.restart());
         }
 
-
         this->kill();
         
         return 0;

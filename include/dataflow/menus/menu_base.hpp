@@ -8,18 +8,6 @@
 
 #include "menu_properties.hpp"
 #include "../study.hpp"
-
-// ImGui
-#include "imgui.h"
-#include "imgui-SFML.h"
-
-// SFML
-#include <SFML/OpenGL.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
 //-------------------------------------------------------------------
 
 
@@ -120,7 +108,8 @@ public:
         // Place the cursor in the middle before drawing
         ImGui::SetCursorPos(sf::Vector2f(available_region.x/2.0 - button_size.x/2.0, ImGui::GetCursorPosY()));
 
-        if(ImGui::ImageButton(button_texture, button_size))
+        ImTextureID button_texture_id = reinterpret_cast<ImTextureID>(static_cast<uintptr_t>(button_texture.getNativeHandle()));
+        if (ImGui::ImageButton(button_texture_id, ImVec2(button_size.x, button_size.y)))
         {
             if(linked_study_)
             {
@@ -172,7 +161,8 @@ public:
 
         bool was_button_pressed = false;
 
-        if(ImGui::ImageButton(add_study_texture_, sf::Vector2f(128,128)))
+        ImTextureID add_study_texture_id = reinterpret_cast<ImTextureID>(static_cast<uintptr_t>(add_study_texture_.getNativeHandle()));
+        if(ImGui::ImageButton(add_study_texture_id, ImVec2(128,128)))
         {
             was_button_pressed = true;
         }

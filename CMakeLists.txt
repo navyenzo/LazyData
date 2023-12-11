@@ -29,6 +29,9 @@ file(GLOB SOURCES "src/*.cpp")
 # Add the executable for the LazyData project using the collected source files
 add_executable(LazyData ${SOURCES} ${DEPENDENCY_SOURCES})
 
+# Define IMGUI_DEFINE_MATH_OPERATORS before compiling sources that include imgui.h
+target_compile_definitions(LazyData PRIVATE IMGUI_DEFINE_MATH_OPERATORS)
+
 # Add the includes of the dependencies
 target_include_directories(LazyData PRIVATE
     "${CMAKE_SOURCE_DIR}/include"

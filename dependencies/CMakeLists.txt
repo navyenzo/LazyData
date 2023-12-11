@@ -119,14 +119,10 @@ set(IMGUI_SFML_IMGUI_DEMO ON)
 
 # Make ImGui-SFML content available for use
 FetchContent_MakeAvailable(imgui_sfml)
-###############################################################
 
-
-
-###############################################################
 # Copy the contents of imconfig-SFML.h to your imconfig.h file.
 # - To be able to cast ImVec2 to sf::Vector2f and vice versa
-###############################################################
+
 # Define the paths
 set(SOURCE_FILE "${CMAKE_BINARY_DIR}/_deps/imgui_sfml-src/imconfig-SFML.h")
 set(DEST_FILE "${CMAKE_BINARY_DIR}/_deps/imgui-src/imconfig.h")
@@ -141,13 +137,46 @@ file(APPEND ${DEST_FILE} "${SOURCE_CONTENTS}")
 
 
 
+###############################################################
+# implot library
+# - This is used to visualize data with plots in imgui
+###############################################################
+# Declare implot dependency with a specific commit hash
+FetchContent_Declare(
+    implot
+    GIT_REPOSITORY https://github.com/epezent/implot.git
+    GIT_TAG master
+)
+
+# Make implot content available for use
+FetchContent_MakeAvailable(implot)
+###############################################################
+
+
+
+###############################################################
+# imgui-filebrowser library
+# - This is used to open/save files within the application
+###############################################################
+# Declare imgui_filebrowser dependency with a specific commit hash
+FetchContent_Declare(
+    imgui_filebrowser
+    GIT_REPOSITORY https://github.com/AirGuanZ/imgui-filebrowser.git
+    GIT_TAG master
+)
+
+# Make imgui_filebrowser content available for use
+FetchContent_MakeAvailable(imgui_filebrowser)
+###############################################################
+
+
+
 
 ###############################################################
 # imnodes libary
 # - This is used to create/visualize computational node graphs
 #   in the application
 ###############################################################
-# Declare imnodes library dependency with a specific commit hash
 FetchContent_Declare(
     imnodes
     GIT_REPOSITORY https://github.com/Nelarius/imnodes.git
@@ -180,40 +209,6 @@ if(NOT imnodes_POPULATED)
         "${CMAKE_BINARY_DIR}/_deps/imgui_sfml-src"    # Add imgui-sfml generated directory
     )
 endif()
-###############################################################
-
-
-
-###############################################################
-# implot library
-# - This is used to visualize data with plots in imgui
-###############################################################
-# Declare implot dependency with a specific commit hash
-FetchContent_Declare(
-    implot
-    GIT_REPOSITORY https://github.com/epezent/implot.git
-    GIT_TAG master
-)
-
-# Make ImGui-SFML content available for use
-FetchContent_MakeAvailable(implot)
-###############################################################
-
-
-
-###############################################################
-# imgui-filebrowser library
-# - This is used to open/save files within the application
-###############################################################
-# Declare imgui_filebrowser dependency with a specific commit hash
-FetchContent_Declare(
-    imgui_filebrowser
-    GIT_REPOSITORY https://github.com/AirGuanZ/imgui-filebrowser.git
-    GIT_TAG master
-)
-
-# Make ImGui-SFML content available for use
-FetchContent_MakeAvailable(imgui_filebrowser)
 ###############################################################
 
 
@@ -272,7 +267,7 @@ file(GLOB IMPLOT_SOURCES ${CMAKE_BINARY_DIR}/_deps/implot-src/*.cpp)
 set(DEPENDENCY_SOURCES
     "${IMGUI_SOURCES}"
     "${IMGUI_SFML_SOURCES}"
-    #"${IMNODES_SOURCES}"
+    "${IMNODES_SOURCES}"
     "${IMPLOT_SOURCES}"
     PARENT_SCOPE
 )
@@ -314,6 +309,7 @@ set(DEPENDENCIES_INCLUDE_PATHS
 set(DEPENDENCY_LIBS_TO_LINK_TO
     ${SFML_LIBRARIES}
     ${OPENGL_gl_LIBRARY}
+    ImGui-SFML::ImGui-SFML
     imnodes
     LazyMatrix
     # Add Boost libraries (if any specific Boost libraries are used in the project)

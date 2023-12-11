@@ -4,8 +4,6 @@
 
 
 //-------------------------------------------------------------------
-#include "imnodes.h"
-
 #include "link_manager.hpp"
 #include "node_manager.hpp"
 

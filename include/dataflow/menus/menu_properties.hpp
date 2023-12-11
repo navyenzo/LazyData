@@ -7,17 +7,7 @@
 #include <string>
 #include <iostream>
 
-// ImGui
-#include "imgui.h"
-#include "imgui-SFML.h"
-
-// SFML
-#include <SFML/OpenGL.hpp>
-#include <SFML/Graphics.hpp>
-#include <SFML/Graphics/CircleShape.hpp>
-#include <SFML/Graphics/RenderWindow.hpp>
-#include <SFML/System/Clock.hpp>
-#include <SFML/Window/Event.hpp>
+#include <app/app_properties.hpp>
 //-------------------------------------------------------------------
 
 

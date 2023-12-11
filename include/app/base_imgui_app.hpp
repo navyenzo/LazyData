@@ -81,6 +81,7 @@ public:
         
         if (this->window_)
         {
+            this->window_->close();
             ImGui::SFML::Shutdown(*this->window_);
         }
     }

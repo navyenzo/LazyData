@@ -21,8 +21,10 @@
 // ImGui
 #define IMGUI_DEFINE_MATH_OPERATORS
 #include <imgui.h>
-#include <imgui-SFML.h>
 #include <imgui_internal.h>
+
+// Imgui-sfml
+#include <imgui-SFML.h>
 
 // imnodes library (for node editor)
 #include <imnodes.h>
