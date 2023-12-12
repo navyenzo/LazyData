@@ -226,7 +226,7 @@ public:
 
         // Calculate the position for the resizing handle at the bottom-right corner of the node
         ImVec2 resize_area_center = ImVec2(node_pos.x + node_dimensions.x, node_pos.y + node_dimensions.y);
-        float handle_radius = 5.0f; // Adjust as needed
+        float handle_radius = 7.0f; // Adjust as needed
         ImVec2 resize_area_start = ImVec2(resize_area_center.x - handle_radius, resize_area_center.y - handle_radius);
         ImVec2 resize_area_end = ImVec2(resize_area_center.x + handle_radius, resize_area_center.y + handle_radius);
 
@@ -240,9 +240,9 @@ public:
         // Show tooltip and change cursor when hovering or resizing
         if (is_hovering || is_resizing_)
         {
-            ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeEW);
+            ImGui::SetMouseCursor(ImGuiMouseCursor_ResizeNWSE);
             ImGui::BeginTooltip();
-            ImGui::Text("  <---|--->  Drag to resize");
+            ImGui::Text(" <--- Drag to resize ---> ");
             ImGui::EndTooltip();
         }
 
@@ -251,7 +251,11 @@ public:
         if (io.MouseClicked[0] && is_hovering)
         {
             is_resizing_ = true;
-            initial_mouse_x_ = io.MousePos.x; // Store the initial mouse x position
+            initial_mouse_pos_ = io.MousePos; // Store the initial mouse position
+
+            // Record the initial positions
+            initial_top_left_pos_ = node_pos;
+            initial_bottom_right_pos_ = ImVec2(node_pos.x + node_dimensions.x, node_pos.y + node_dimensions.y);
         }
         else if (io.MouseReleased[0])
         {
@@ -260,14 +264,15 @@ public:
 
         if (is_resizing_)
         {
-            // Calculate the amount of width change based on the mouse movement
-            float width_change = io.MousePos.x - initial_mouse_x_;
+            // Calculate the amount of width and height change based on the mouse movement
+            float width_change = io.MousePos.x - initial_mouse_pos_.x;
+            float height_change = io.MousePos.y - initial_mouse_pos_.y;
 
-            // Update the node width by the calculated amount
-            node_styling_.change_node_size_by_amount(ImVec2(width_change, 0));
+            // Update the node width and height by the calculated amount
+            node_styling_.change_node_size_by_amount(ImVec2(width_change, height_change));
 
-            // Update initial mouse x position for the next frame
-            initial_mouse_x_ = io.MousePos.x;
+            // Update initial mouse position for the next frame
+            initial_mouse_pos_ = io.MousePos;
         }
     }
 
@@ -345,10 +350,12 @@ private:
 
 
 
-    // New member variable for tracking resizing state
-    bool is_resizing_ = false;
-
     float initial_mouse_x_ = 0;
+
+    bool is_resizing_ = false;
+    ImVec2 initial_mouse_pos_ = ImVec2(0, 0);
+    ImVec2 initial_top_left_pos_ = ImVec2(0, 0);   // Initial top-left position of the node
+    ImVec2 initial_bottom_right_pos_ = ImVec2(0, 0); // Initial bottom-right position of the node
     
 
 
