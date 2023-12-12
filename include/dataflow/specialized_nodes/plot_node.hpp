@@ -29,7 +29,7 @@ const NodeStyling DEFAULT_PLOT_NODE_STYLING(ImVec4(220,20,50,255),
                                             ImVec4(250, 50, 80, 255),
                                             ImVec4(250, 50, 80, 255),
                                             ImVec4(250, 50, 80, 255),
-                                            400.0f);
+                                            ImVec2(400.0f, 300.0f));
 //-------------------------------------------------------------------
 
 
@@ -154,7 +154,7 @@ public:
 
             ImGui::BeginGroup();
 
-                if (ImPlot::BeginPlot("Data", ImVec2(this->get_node_width(), 400)))
+                if (ImPlot::BeginPlot("Data", this->get_node_size()))
                 {
                     ImPlot::SetupAxes("x","f(x)");
                     ImPlot::SetNextMarkerStyle(ImPlotMarker_Circle);

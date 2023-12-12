@@ -26,7 +26,7 @@ const NodeStyling DEFAULT_MATRIX_SOURCE_NODE_STYLING(
                                                      ImVec4(165, 250, 197, 255), // title bar hovered color
                                                      ImVec4(165, 250, 197, 255), // title bar selected color
                                                      ImVec4(165, 250, 197, 255), // node outline color
-                                                     400 // node expanded width
+                                                     ImVec2(300,300) // node expanded size
                                                     );
 //-------------------------------------------------------------------
 
@@ -161,7 +161,7 @@ public:
 
         ImGui::Dummy(ImVec2(0,30));
 
-        draw_matrix_table(matrix_data_, page_index_, ImVec2(this->get_node_width(),this->get_node_width()), are_entries_editable_);
+        draw_matrix_table(matrix_data_, page_index_, this->get_node_size(), are_entries_editable_);
     }
 
 

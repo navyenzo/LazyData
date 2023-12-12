@@ -29,7 +29,7 @@ const NodeStyling DEFAULT_TABLE_NODE_STYLING(ImVec4(70,20,50,255),
                                              ImVec4(100, 50, 80, 255),
                                              ImVec4(100, 50, 80, 255),
                                              ImVec4(100, 50, 80, 255),
-                                             300.0f);
+                                             ImVec2(300.0f,300.0f));
 //-------------------------------------------------------------------
 
 
@@ -114,7 +114,7 @@ public:
         if(input_pin_.get_data())
         {
 
-            if(draw_matrix_table(*input_pin_.get_data(), page_index_, ImVec2(this->get_node_width(),this->get_node_width()), are_entries_editable_))
+            if(draw_matrix_table(*input_pin_.get_data(), page_index_, this->get_node_size(), are_entries_editable_))
             {
                 // This means the user updated the data manually by changinge it
                 // directly in the table

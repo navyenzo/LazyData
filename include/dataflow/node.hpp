@@ -118,19 +118,19 @@ public:
 
 
     /**
-     * @brief Retrieves the current width of the node.
+     * @brief Retrieves the current size of the node.
      * 
-     * This function determines the node's width based on
+     * This function determines the node's size based on
      * its current expanded/collapsed state.
      * 
-     * @return float The width of the node in its current state (either expanded or collapsed).
+     * @return ImVec2 The size of the node in its current state (either expanded or collapsed).
      */
-    float get_node_width()const
+    ImVec2 get_node_size()const
     {
         if(show_node_contents_)
-            return node_styling_.get_node_width();
+            return node_styling_.get_node_size();
         else
-            return node_styling_.get_node_collapsed_width();
+            return node_styling_.get_node_collapsed_size();
     }
 
 
@@ -149,7 +149,7 @@ public:
 
         // Adjust the node's width depending on
         // whether the node's content is to be shown
-        ImGui::PushItemWidth(this->get_node_width());
+        ImGui::PushItemWidth(this->get_node_size().x);
 
         // Begin drawing the node
         ImNodes::BeginNode(id_);
@@ -173,7 +173,7 @@ public:
             ImGui::EndGroup();
 
             // Draw the output pins
-            ImGui::SameLine(this->get_node_width());
+            ImGui::SameLine(this->get_node_size().x);
             ImGui::BeginGroup();
                 this->draw_output_pins();
             ImGui::EndGroup();
@@ -264,7 +264,7 @@ public:
             float width_change = io.MousePos.x - initial_mouse_x_;
 
             // Update the node width by the calculated amount
-            node_styling_.change_node_width_by_amount(width_change);
+            node_styling_.change_node_size_by_amount(ImVec2(width_change, 0));
 
             // Update initial mouse x position for the next frame
             initial_mouse_x_ = io.MousePos.x;
@@ -330,7 +330,7 @@ private:
      */
     void draw_title_bar()
     {
-        ImGui::PushItemWidth(this->get_node_width());
+        ImGui::PushItemWidth(this->get_node_size().x);
 
         ImNodes::BeginNodeTitleBar();
 
