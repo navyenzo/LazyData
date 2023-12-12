@@ -27,37 +27,6 @@ FetchContent_MakeAvailable(LazyMatrix)
 
 
 ###############################################################
-# Exceptions for when cross-compiling for windows in linux
-###############################################################
-
-# Default configuration for SFML
-set(SFML_BUILD_AUDIO ON)
-
-# Check if compiling with MinGW-w64 on Linux for Windows (Cross-compiling)
-if(CMAKE_SYSTEM_NAME STREQUAL "Windows" AND CMAKE_COMPILER_IS_GNUCXX)
-
-    set(SFML_USE_X11 OFF CACHE BOOL "Don't use X11 for SFML on Windows")
-    
-    # Fetch and compile OpenAL
-    FetchContent_Declare(
-        openal
-        GIT_REPOSITORY https://github.com/kcat/openal-soft.git
-        GIT_TAG master # Specify a particular tag or commit if needed
-    )
-    FetchContent_MakeAvailable(openal)
-
-    set(SFML_BUILD_AUDIO OFF)
-
-    # Use system dependencies for SFML
-    set(SFML_USE_SYSTEM_DEPS TRUE)
-
-endif()
-
-###############################################################
-
-
-
-###############################################################
 # SFML library
 ###############################################################
 # Declare SFML dependency

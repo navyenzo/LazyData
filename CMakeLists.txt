@@ -50,6 +50,11 @@ target_link_libraries(LazyData PRIVATE
     ${DEPENDENCY_LIBS_TO_LINK_TO}
 )
 
+# Windows specific linker options
+if(WIN32)
+    target_link_libraries(LazyData PRIVATE bcrypt)
+endif()
+
 
 
 ###############################################################

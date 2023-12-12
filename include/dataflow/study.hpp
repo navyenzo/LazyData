@@ -241,49 +241,49 @@ inline void Study::handle_drag_and_drop()
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("IMAGE_LOADER_NODE"))
+        else if(ImGui::AcceptDragDropPayload("IMAGE_LOADER_NODE"))
         {
             auto& new_node = add_node<ImageLoaderNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("UNARY_OPERATOR_NODE"))
+        else if(ImGui::AcceptDragDropPayload("UNARY_OPERATOR_NODE"))
         {
             auto& new_node = add_node<UnaryOperatorNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("AUGMENT_NODE"))
+        else if(ImGui::AcceptDragDropPayload("AUGMENT_NODE"))
         {
             auto& new_node = add_node<AugmentNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("TABLE_NODE"))
+        else if(ImGui::AcceptDragDropPayload("TABLE_NODE"))
         {
             auto& new_node = add_node<TableNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("PLOT_NODE"))
+        else if(ImGui::AcceptDragDropPayload("PLOT_NODE"))
         {
             auto& new_node = add_node<PlotNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("HEAT_MAP_NODE"))
+        else if(ImGui::AcceptDragDropPayload("HEAT_MAP_NODE"))
         {
             auto& new_node = add_node<HeatMapNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("ROI_NODE"))
+        else if(ImGui::AcceptDragDropPayload("ROI_NODE"))
         {
             auto& new_node = add_node<ROINode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
-        if(ImGui::AcceptDragDropPayload("SELECTOR_NODE"))
+        else if(ImGui::AcceptDragDropPayload("SELECTOR_NODE"))
         {
             auto& new_node = add_node<SelectorNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
