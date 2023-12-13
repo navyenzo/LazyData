@@ -46,46 +46,6 @@ Class Node;
 
 //-------------------------------------------------------------------
 /**
- * @file base_pin.hpp
- * @brief Base class for all types of pins in the DataGraph project.
- *
- * The BasePin class serves as a polymorphic base for different types of pins
- * in a data graph, allowing for operations on pins without needing to know
- * their specific data type.
- *
- * @author Vincenzo Barbato
- * @contact GitHub Project: https://github.com/navyenzo/LazyData.git
- *          LinkedIn: https://www.linkedin.com/in/vincenzobarbato/
- */
-//-------------------------------------------------------------------
-class BasePin
-{
-public:
-
-    virtual ~BasePin() = default;
-    
-    virtual const std::string& get_id() const = 0;
-    virtual void set_id(const std::string& id) = 0;
-
-    virtual Node* get_parent_node() = 0;
-    virtual const Node* get_parent_node() const = 0;
-    virtual void set_parent_node(Node* parent_node) = 0;
-
-    virtual const std::string& get_name() const = 0;
-    virtual void set_name(const std::string& name) = 0;
-
-    virtual PinType get_pin_type() const = 0;
-    virtual void set_pin_type(PinType pin_type) = 0;
-
-    virtual bool is_connected() const = 0;
-    virtual bool can_pin_be_connected() const = 0;
-};
-//-------------------------------------------------------------------
-
-
-
-//-------------------------------------------------------------------
-/**
  * @brief Represents a Pin in a data graph
  * 
  * This class manages connections in a node-based data flow architecture,

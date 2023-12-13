@@ -179,6 +179,9 @@ public:
                         }
                     }
 
+                    // Get the current plot limits
+                    plotting_rect_limits_ = ImPlot::GetPlotLimits();
+
                     ImPlot::EndPlot();
                 }
             
@@ -204,6 +207,8 @@ private:
     MatrixType y_axes_;
 
     MatrixType plotting_matrix_;
+
+    ImPlotRect plotting_rect_limits_;
 
     SelectorUI x_axis_selector_ui_;
     SelectorUI y_axes_selector_ui_;
