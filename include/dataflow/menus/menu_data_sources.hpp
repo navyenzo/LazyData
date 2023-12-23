@@ -36,6 +36,7 @@ public:
     {
         this->is_button_hovered_[get_node_type_name<MatrixSourceNode>()] = false;
         this->is_button_hovered_[get_node_type_name<ImageLoaderNode>()] = false;
+        this->is_button_hovered_[get_node_type_name<CsvLoaderNode>()] = false;
     }
 
 
@@ -51,6 +52,7 @@ public:
         // Load the textures used to draw the "add node" buttons
         matrix_source_texture_.loadFromFile(resources_path + std::string("matrix_source.png"));
         image_loader_texture_.loadFromFile(resources_path + std::string("load_image.png"));
+        csv_loader_texture_.loadFromFile(resources_path + std::string("csv_file.png"));
     }
 
 
@@ -66,6 +68,9 @@ public:
             ImGui::Separator();
             this->draw_button_to_add_node<ImageLoaderNode>(image_loader_texture_);
             ImGui::Text("Load Image");
+            ImGui::Separator();
+            this->draw_button_to_add_node<CsvLoaderNode>(csv_loader_texture_);
+            ImGui::Text("Load csv file");
             ImGui::Separator();
         }
 
@@ -85,6 +90,7 @@ private: // Private variables
     // All the button textures
     sf::Texture matrix_source_texture_;
     sf::Texture image_loader_texture_;
+    sf::Texture csv_loader_texture_;
 };
 //-------------------------------------------------------------------
 

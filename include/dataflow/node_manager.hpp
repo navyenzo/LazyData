@@ -31,6 +31,7 @@ using NodeVariantType = std::variant<
                                      UnaryOperatorNode,
                                      MatrixSourceNode,
                                      ImageLoaderNode,
+                                     CsvLoaderNode,
                                      TableNode,
                                      PlotNode,
                                      HeatMapNode,

@@ -49,6 +49,8 @@ using Color3MatrixUpdatedCallback = std::function<void(const Color3MatrixType&)>
 using Color4MatrixType = LazyMatrix::Matrix< dlib::rgb_alpha_pixel >;
 using Color4MatrixUpdatedCallback = std::function<void(const Color4MatrixType&)>;
 
+using CsvMatrixType = LazyMatrix::CSVMatrix<std::string>;
+
 using VectorOfMatricesType = std::vector<MatrixType>;
 using VectorOfMatricesUpdatedCallback = std::function<void(const VectorOfMatricesType&)>;
 
@@ -84,6 +86,7 @@ class Node;
 
 class MatrixSourceNode;
 class ImageLoaderNode;
+class CsvLoaderNode;
 class UnaryOperatorNode;
 class AugmentNode;
 class TableNode;
@@ -188,6 +191,13 @@ template<>
 inline std::string get_node_type_name<ImageLoaderNode>()
 {
     return "IMAGE_LOADER_NODE";
+}
+    
+
+template<>
+inline std::string get_node_type_name<CsvLoaderNode>()
+{
+    return "CSV_LOADER_NODE";
 }
 
 template<>

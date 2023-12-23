@@ -247,6 +247,12 @@ inline void Study::handle_drag_and_drop()
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
 
+        else if(ImGui::AcceptDragDropPayload("CSV_LOADER_NODE"))
+        {
+            auto& new_node = add_node<CsvLoaderNode>();
+            ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
+        }
+
         else if(ImGui::AcceptDragDropPayload("UNARY_OPERATOR_NODE"))
         {
             auto& new_node = add_node<UnaryOperatorNode>();
@@ -318,42 +324,47 @@ inline void Study::handle_popup_context_menu()
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
             if(ImGui::Selectable(" * Image Loader Node"))
-                popup_context_menu_answer_ = 0;
+                popup_context_menu_answer_ = 1;
+            if(ImGui::IsItemHovered())
+                ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+
+            if(ImGui::Selectable(" * csv Loader Node"))
+                popup_context_menu_answer_ = 2;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
 
             if(ImGui::Selectable(" * Unary Operator Node"))
-                popup_context_menu_answer_ = 1;
-            if(ImGui::IsItemHovered())
-                ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-                
-            if(ImGui::Selectable(" * Augment Node"))
-                popup_context_menu_answer_ = 2;
-            if(ImGui::IsItemHovered())
-                ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
-                
-            if(ImGui::Selectable(" * Table Node"))
                 popup_context_menu_answer_ = 3;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
                 
-            if (ImGui::Selectable(" * Plot Node"))
+            if(ImGui::Selectable(" * Augment Node"))
                 popup_context_menu_answer_ = 4;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
                 
-            if(ImGui::Selectable(" * Heat Map Node"))
+            if(ImGui::Selectable(" * Table Node"))
                 popup_context_menu_answer_ = 5;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
                 
-            if (ImGui::Selectable(" * Region Of Interest (ROI) Node"))
+            if (ImGui::Selectable(" * Plot Node"))
                 popup_context_menu_answer_ = 6;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
                 
-            if (ImGui::Selectable(" * Selector Node"))
+            if(ImGui::Selectable(" * Heat Map Node"))
                 popup_context_menu_answer_ = 7;
+            if(ImGui::IsItemHovered())
+                ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+                
+            if (ImGui::Selectable(" * Region Of Interest (ROI) Node"))
+                popup_context_menu_answer_ = 8;
+            if(ImGui::IsItemHovered())
+                ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
+                
+            if (ImGui::Selectable(" * Selector Node"))
+                popup_context_menu_answer_ = 9;
             if(ImGui::IsItemHovered())
                 ImGui::SetMouseCursor(ImGuiMouseCursor_Hand);
         
@@ -390,49 +401,56 @@ inline void Study::handle_popup_context_menu_answer()
         }
         break;
 
-        case 2: // Unary Operator Node
+        case 2: // csv Loader Node
+        {
+            auto& new_node = add_node<CsvLoaderNode>();
+            ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
+        }
+        break;
+
+        case 3: // Unary Operator Node
         {
             auto& new_node = add_node<UnaryOperatorNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 3: // Augment Node
+        case 4: // Augment Node
         {
             auto& new_node = add_node<AugmentNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 4: // Table Node
+        case 5: // Table Node
         {
             auto& new_node = add_node<TableNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 5: // Plot Node
+        case 6: // Plot Node
         {
             auto& new_node = add_node<PlotNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 6: // Heat Map Node
+        case 7: // Heat Map Node
         {
             auto& new_node = add_node<HeatMapNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 7: // Region Of Interest (ROI) Node
+        case 8: // Region Of Interest (ROI) Node
         {
             auto& new_node = add_node<ROINode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());
         }
         break;
 
-        case 8: // Selector Node
+        case 9: // Selector Node
         {
             auto& new_node = add_node<SelectorNode>();
             ImNodes::SetNodeScreenSpacePos(new_node.get_id(), ImGui::GetMousePos());

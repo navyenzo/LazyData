@@ -7,6 +7,7 @@
 // Data Sources Nodes
 #include "matrix_source_node.hpp"
 #include "image_loader_node.hpp"
+#include "csv_loader_node.hpp"
 
 // Data Augmenting Nodes
 #include "augment_node.hpp"
