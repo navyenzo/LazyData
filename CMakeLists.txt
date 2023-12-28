@@ -44,7 +44,6 @@ target_include_directories(LazyData PRIVATE
 ###############################################################
 # Linker options
 ###############################################################
-
 # Link executable to all the dependencies libraries
 target_link_libraries(LazyData PRIVATE 
     ${DEPENDENCY_LIBS_TO_LINK_TO}
@@ -54,23 +53,40 @@ target_link_libraries(LazyData PRIVATE
 if(WIN32)
     target_link_libraries(LazyData PRIVATE bcrypt)
 endif()
+###############################################################
 
 
 
 ###############################################################
 # Tell cmake where to place binaries and libraries
 ###############################################################
-
 set_target_properties(LazyData PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/bin"
     LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/lib"
 )
+###############################################################
 
 
 
 ###############################################################
 # Ensuring the executable knows where to find its dependencies
 ###############################################################
-
 set(CMAKE_INSTALL_RPATH "${CMAKE_BINARY_DIR}/lib")
 set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
+###############################################################
+
+
+
+###############################################################
+# Build unit tests or not
+###############################################################
+# Option to build or not build the provided tests
+option(LazyData_BUILD_TESTS "Build the tests." ON)
+
+message("LazyData_BUILD_TESTS option: " ${LazyData_BUILD_TESTS})
+
+if(${LazyData_BUILD_TESTS})
+    enable_testing()
+    add_subdirectory(tests)
+endif()
+###############################################################

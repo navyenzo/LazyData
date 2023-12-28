@@ -44,6 +44,7 @@ namespace DataGraph
  */
 //-------------------------------------------------------------------
 template <typename DataType>
+
 class Data
 {
 public:
@@ -94,6 +95,7 @@ private:
  */
 //-------------------------------------------------------------------
 template <typename DataType>
+
 class Data3D
 {
 public:
@@ -146,6 +148,7 @@ private:
  */
 //-------------------------------------------------------------------
 template <typename MatrixType>
+
 class SpecializedData : public Data<typename std::remove_reference<decltype(std::declval<MatrixType>()(0,0))>::type>
 {
 public:
@@ -194,6 +197,7 @@ private:
  */
 //-------------------------------------------------------------------
 template <typename MatrixType>
+
 class SpecializedData3D : public Data3D<typename std::remove_reference<decltype(std::declval<MatrixType>()(0,0))>::type>
 {
 public:
@@ -242,6 +246,7 @@ private:
  */
 //-------------------------------------------------------------------
 template <typename MatrixType>
+
 auto wrap_matrix(MatrixType& matrix)
 {
     return std::make_shared<SpecializedData<MatrixType>>(matrix);
@@ -260,6 +265,7 @@ auto wrap_matrix(MatrixType& matrix)
  */
 //-------------------------------------------------------------------
 template <typename MatrixType>
+
 auto wrap_matrix3d(MatrixType& matrix)
 {
     return std::make_shared<SpecializedData3D<MatrixType>>(matrix);
