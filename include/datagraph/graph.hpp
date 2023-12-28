@@ -61,6 +61,12 @@ public:
         return node_manager_.remove_node(node_id);
     }
 
+    void clear()
+    {
+        link_manager_.clear();
+        node_manager_.clear();
+    }
+
     bool connect_pins(int64_t pin1_id, int64_t pin2_id, bool should_check_for_cycles = false)
     {
         auto pin1 = get_pin_by_id(pin1_id);

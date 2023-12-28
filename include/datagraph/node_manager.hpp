@@ -80,6 +80,10 @@ public:
     // Methods to get the beginning/end iterators of the nodes map
     auto cbegin()const { return nodes_.cbegin(); }
     auto cend()const { return nodes_.cend(); }
+    auto begin()const { return nodes_.begin(); }
+    auto end()const { return nodes_.end(); }
+    auto size()const { return nodes_.size(); }
+    void clear() { nodes_.clear(); }
 
 
 

@@ -106,15 +106,18 @@ public:
 
     explicit Pin(Node* owner, PinType type) : BasePin(type), owner_(owner) {}
 
-    const std::type_info& type() const override {
+    const std::type_info& type() const override
+    {
         return typeid(T);
     }
 
-    std::shared_ptr<T> get_data() {
+    std::shared_ptr<T> get_data()
+    {
         return data_;
     }
 
-    int64_t get_node_id() const override {
+    int64_t get_node_id() const override
+    {
         return owner_->get_id();
     }
 

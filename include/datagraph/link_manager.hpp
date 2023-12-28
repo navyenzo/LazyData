@@ -125,6 +125,18 @@ public:
         return false; // The input pin is not connected.
     }
 
+    const std::vector<std::shared_ptr<Link>>& get_links()const
+    {
+        return links_;
+    }
+
+    void clear()
+    {
+        links_.clear();
+        output_to_input_.clear();
+        input_to_output_.clear();
+    }
+
 
 
 private:

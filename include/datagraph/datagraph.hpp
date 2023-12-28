@@ -12,6 +12,7 @@
 #include "link_manager.hpp"
 #include "node_manager.hpp"
 #include "graph.hpp"
+#include "serializer.hpp"
 #include "debugging_functions.hpp"
 //-------------------------------------------------------------------
 

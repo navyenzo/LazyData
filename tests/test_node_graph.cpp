@@ -7,8 +7,9 @@
  * It includes tests for node construction, pin assignment, connecting pins, cycle detection,
  * and type and directionality constraints in pin connections.
  *
- * @author [Your Name]
- * @date [Date]
+ * @author Vincenzo Barbato
+ * @link https://www.linkedin.com/in/vincenzobarbato/
+ * @namespace DataGraph
  */
 //-------------------------------------------------------------------
 

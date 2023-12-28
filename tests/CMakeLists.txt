@@ -22,6 +22,7 @@ target_link_libraries(lazydata_tests PRIVATE Catch2::Catch2WithMain)
 # Add the include directories
 target_include_directories(lazydata_tests PUBLIC
     "${CMAKE_SOURCE_DIR}/include"
+    "${CMAKE_BINARY_DIR}/_deps/json-src/include"
     ${CMAKE_BINARY_DIR}/_deps/catch-src/src
 )
 
