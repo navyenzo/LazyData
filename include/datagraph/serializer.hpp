@@ -166,7 +166,7 @@ private:
         nlohmann::json pin_json;
         pin_json["id"] = pin->get_id();
         pin_json["type"] = pin->is_input() ? "Input" : "Output";
-        pin_json["data_type"] = pin->type().name();
+        pin_json["data_type"] = pin->get_data_type().name();
         pin_json["node_id"] = pin->get_node_id();
 
         if (pin->is_output())

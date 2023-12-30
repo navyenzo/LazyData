@@ -1,6 +1,6 @@
 //-------------------------------------------------------------------
 /**
- * @file test_graph_saving.cpp
+ * @file test_graph_serialize_deserialize.cpp
  * @brief Test suite for graph serialization functionality.
  *
  * This file contains tests to ensure the correct serialization of graph components
@@ -61,35 +61,39 @@ TEST_CASE("Graph Serialization", "[Serializer]")
         auto reconstructed_graph = std::make_shared<DataGraph::Graph>();
         DataGraph::Serializer::load_from_json(*reconstructed_graph, json_file);
 
-        // Perform checks to verify that the reconstructed graph matches the expected structure
+        // Check the number of nodes in both graphs
         REQUIRE(reconstructed_graph->get_node_manager().size() == original_graph->get_node_manager().size());
+        REQUIRE(reconstructed_graph->get_link_manager().get_links().size() == original_graph->get_link_manager().get_links().size());
 
-        // TODO: Fix the test for chacking deserialization of node graph
-
-        /*// Check if the number of links match
-        const auto& original_link_manager = original_graph->get_link_manager();
-        const auto& reconstructed_link_manager = reconstructed_graph->get_link_manager();
-        REQUIRE(reconstructed_link_manager.get_links().size() == original_link_manager.get_links().size());
-
-        // Further checks can include verifying the structure of connections in each node
-        for (const auto& [node_id, original_node] : original_graph->get_node_manager())
+        // Enhanced sorting function for nodes with weighted input and output pins
+        auto node_sorter = [](const std::shared_ptr<DataGraph::Node>& node1, const std::shared_ptr<DataGraph::Node>& node2)
         {
-            auto reconstructed_node = reconstructed_graph->get_node_manager().get_node(node_id);
-            REQUIRE(reconstructed_node != nullptr);
+            auto score1 = node1->get_input_pins().size() * 1000 + node1->get_output_pins().size() * 0.001;
+            auto score2 = node2->get_input_pins().size() * 1000 + node2->get_output_pins().size() * 0.001;
+            return score1 < score2;
+        };
 
-            // Check if output pins of original node are connected to the same number of input pins in the reconstructed graph
-            for (const auto& original_output_pin : original_node->get_output_pins())
-            {
-                auto connected_input_pins = original_link_manager.get_connected_input_pins(original_output_pin->get_id());
-                auto reconstructed_output_pin = reconstructed_node->get_pin_by_id(original_output_pin->get_id());
+        std::vector<std::shared_ptr<DataGraph::Node>> original_nodes, reconstructed_nodes;
+        
+        for (const auto& [id, node] : original_graph->get_node_manager())
+        {
+            original_nodes.push_back(node);
+        }
 
-                REQUIRE(reconstructed_output_pin != nullptr);
-                auto reconstructed_connected_input_pins = reconstructed_link_manager.get_connected_input_pins(reconstructed_output_pin->get_id());
-                REQUIRE(connected_input_pins.size() == reconstructed_connected_input_pins.size());
-            }
+        for (const auto& [id, node] : reconstructed_graph->get_node_manager())
+        {
+            reconstructed_nodes.push_back(node);
+        }
 
-            // Similar checks can be done for input pins
-        }*/
+        std::sort(original_nodes.begin(), original_nodes.end(), node_sorter);
+        std::sort(reconstructed_nodes.begin(), reconstructed_nodes.end(), node_sorter);
+
+        // Compare the sorted nodes
+        for (size_t i = 0; i < original_nodes.size(); ++i)
+        {
+            REQUIRE(original_nodes[i]->get_input_pins().size() == reconstructed_nodes[i]->get_input_pins().size());
+            REQUIRE(original_nodes[i]->get_output_pins().size() == reconstructed_nodes[i]->get_output_pins().size());
+        }
     }
 }
 //-------------------------------------------------------------------

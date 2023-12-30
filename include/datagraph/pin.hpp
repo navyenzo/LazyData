@@ -69,7 +69,7 @@ public:
     }
 
     virtual ~BasePin() = default;
-    virtual const std::type_info& type() const = 0;
+    virtual const std::type_info& get_data_type() const = 0;
     virtual int64_t get_node_id() const = 0;
 
     int64_t get_id() const
@@ -85,6 +85,11 @@ public:
     bool is_output() const
     {
         return type_ == PinType::Output;
+    }
+
+    PinType get_pin_type()const
+    {
+        return type_;
     }
 
 
@@ -106,9 +111,23 @@ public:
 
     explicit Pin(Node* owner, PinType type) : BasePin(type), owner_(owner) {}
 
-    const std::type_info& type() const override
+    const std::type_info& get_data_type() const override
     {
         return typeid(T);
+    }
+
+    /**
+     * @brief Sets the data for the pin.
+     * @param data The data to be set for the pin.
+     */
+    void set_data(const std::shared_ptr<T>& data)
+    {
+        data_ = data;
+
+        if(this->get_pin_type() == PinType::Input && owner_)
+        {
+            owner_->increment_input_update_counter();
+        }
     }
 
     std::shared_ptr<T> get_data()
@@ -118,7 +137,10 @@ public:
 
     int64_t get_node_id() const override
     {
-        return owner_->get_id();
+        if(owner_)
+            return owner_->get_id();
+        else
+            return 0;
     }
 
 
